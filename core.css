@@ -18,3 +18,26 @@
     font-weight: 200;
     color: black;
 }
+
+#circleView {
+    height: 32px;
+    width: 32px;
+    background-color: rgb(110, 117, 124);
+    border-radius: 50%;
+    display: flex;
+}
+
+#basketCount {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+#basketProductInformation {
+    font-size: 14px;
+    font-weight: 300;
+}

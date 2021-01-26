@@ -4,10 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Programlama Final Sınavı</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="./assets/font-awesome/css/all.css"/>
     <link href="core.css" rel="stylesheet"/>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script defer src="./assets/font-awesome/js/all.js"></script>
 </head>
 <body ng-app="app" ng-controller="app-controller">
     <div class="full-container">
@@ -34,12 +36,12 @@
                         </div>
                         <div class="card-body">
                             <div class="text-center">
-                                <span id="productPrice">{{product.price}}<span id="productUnit"> / {{product.unit}}</span></span><br/>
+                                <span id="productPrice">{{product.priceAsText}}<span id="productUnit"> / {{product.unit}}</span></span><br/>
                                 <span id="productDescription">{{product.description}}</span><br/>
                                 <span id="productFeature">{{product.features}}</span>
                             </div>
                             <div class="d-grid gap-2 mt-2">
-                                <a href="#" class="btn btn-block btn-primary">Sepete Ekle</a>
+                                <button ng-click="addProductToBasket(product.id)" class="btn btn-block btn-primary">Sepete Ekle</button>
                             </div>
                         </div>
                     </div>
@@ -47,7 +49,41 @@
             </div>
 
             <div class="row mt-4">
-                
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col">
+                            <div class="float-start">
+                                <h6>Siparişleriniz</h6>
+                            </div>
+                            <div class="float-end">
+                                <div id="circleView" class="text-center">
+                                    <span id="basketCount">{{basketProductsCount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <div class="card" style="width: 100%;">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" ng-repeat="backetProduct in basketProducts">
+
+                                        <div class="float-start">
+                                            <span id="basketProductInformation">{{ backetProduct.title}} ({{ (backetProduct.quantity) }}) {{ backetProduct.totalPriceAsText }}</span>
+                                        </div>
+
+                                        <div class="float-end">
+                                            <a ng-click="removeProductFromBasket(backetProduct.id)"><i class="fas fa-times" style="cursor: pointer; font-size: 24px; color: red;"></i></a>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>                
             </div>
         </div>
     </div>
@@ -55,29 +91,96 @@
 <script type="text/javascript">
     var app = angular.module("app", []);
     app.controller("app-controller", function($scope) {
+        $scope.basketProductsCount = 6
+        $scope.basketProducts = [];
+
         $scope.products = [
             {
+                id: 1,
                 title: 'Ekmek',
-                price: '2₺',
+                price: 2,
+                priceAsText: '2₺',
                 unit: 'Adet',
                 description: 'Somun ekmek',
                 features: '200 gr'
             },
             {
+                id: 2,
                 title: 'Çikolata',
-                price: '5₺',
+                price: 5,
+                priceAsText: '5₺',
                 unit: 'Adet',
                 description: 'Bitter Çikolata',
                 features: '60 gr'
             },
             {
+                id: 3,
                 title: 'Domates',
-                price: '2₺',
+                price: 6,
+                priceAsText: '6₺',
                 unit: 'Kg',
                 description: 'Domates',
                 features: 'Antalya Sera'
             }
         ]
+    
+        $scope.addProductToBasket = function(productId) {
+            const product = findProductByProductId(productId);
+            if (product) {
+                const basketProduct = findBasketProductByProductId(product.id);
+                if (basketProduct) {
+                    console.log("sepeti güncelle");
+                    
+                } else {
+                    console.log("sepete ekle");
+                    const basketProduct = mapFromProductToBasketProduct(product);
+                    basketProduct.id = $scope.basketProducts.length + 1;
+                    console.log(basketProduct);
+                }
+            } else {
+                console.log("not found product");
+            }
+        }
+        $scope.removeProductFromBasket = function(basketProductId) {
+            console.log(`Basket Product Id ${basketProductId}`);
+        }
+
+        function findProductByProductId(productId) {
+            console.log(`Product ID ${productId}`);
+            for(let i = 0; i < $scope.products.length; i++) {
+                const product = $scope.products[i];
+                if (product.id == productId) {
+                    return product;
+                }
+            }
+            return undefined;
+        }
+
+        function findBasketProductByProductId(productId) {
+            console.log(`Product ID ${productId}`);
+            for(let i = 0; i < $scope.basketProducts.length; i++) {
+                const basketProduct = $scope.basketProducts[i];
+                if (basketProduct.productId == productId) {
+                    return basketProduct;
+                }
+            }
+            return undefined;
+        }
+
+        function mapFromProductToBasketProduct(product) {
+            return {
+                productId: product.id,
+                title: product.title,
+                price: product.price,
+                priceAsText: product.priceAsText,
+                unit: product.unit,
+                description: product.description,
+                features: product.features,
+                quantity: product.quantity,
+                totalPrice: product.price,
+                totalPriceAsText: product.priceAsText
+            }
+        }
     });
 </script>
 </html>
