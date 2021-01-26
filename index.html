@@ -91,7 +91,7 @@
 <script type="text/javascript">
     var app = angular.module("app", []);
     app.controller("app-controller", function($scope) {
-        $scope.basketProductsCount = 6
+        $scope.basketProductsCount = 0
         $scope.basketProducts = [];
 
         $scope.products = [
@@ -127,14 +127,21 @@
         $scope.addProductToBasket = function(productId) {
             const product = findProductByProductId(productId);
             if (product) {
-                const basketProduct = findBasketProductByProductId(product.id);
-                if (basketProduct) {
-                    console.log("sepeti güncelle");
-                    
+                const basketProductResult = findBasketProductByProductId(product.id);
+                if (basketProductResult) {
+                    const basketProduct = basketProductResult.basketProduct;
+                    const index = basketProduct.index;
+                    basketProduct.quantity = basketProduct.quantity + 1;
+                    basketProduct.totalPrice = basketProduct.price * basketProduct.quantity;
+                    basketProduct.totalPriceAsText = basketProduct.totalPrice + '₺';
+                    $scope.basketProducts[index] = basketProduct;
                 } else {
                     console.log("sepete ekle");
                     const basketProduct = mapFromProductToBasketProduct(product);
                     basketProduct.id = $scope.basketProducts.length + 1;
+                    basketProduct.quantity = 1;
+                    $scope.basketProducts.push(basketProduct);
+                    $scope.basketProductsCount = $scope.basketProducts.length;
                     console.log(basketProduct);
                 }
             } else {
@@ -161,7 +168,7 @@
             for(let i = 0; i < $scope.basketProducts.length; i++) {
                 const basketProduct = $scope.basketProducts[i];
                 if (basketProduct.productId == productId) {
-                    return basketProduct;
+                    return {index: i, basketProduct: basketProduct};
                 }
             }
             return undefined;
