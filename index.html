@@ -149,7 +149,11 @@
             }
         }
         $scope.removeProductFromBasket = function(basketProductId) {
-            console.log(`Basket Product Id ${basketProductId}`);
+            const basketProductResult = findBasketProductByProductId(basketProductId);
+            if (basketProductResult) {
+                const index = basketProductResult.index;
+                $scope.basketProducts.splice(index, 1);
+            }
         }
 
         function findProductByProductId(productId) {
