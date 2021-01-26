@@ -153,6 +153,7 @@
             if (basketProductResult) {
                 const index = basketProductResult.index;
                 $scope.basketProducts.splice(index, 1);
+                $scope.basketProductsCount = $scope.basketProducts.length;
             }
         }
 
