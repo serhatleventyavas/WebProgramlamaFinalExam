@@ -3,11 +3,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Programlama Final Sınavı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="core.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 </head>
-<body ng-app="app">
+<body ng-app="app" ng-controller="app-controller">
+    <div class="full-container">
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <img src="./assets/bm.png" class="img-thumbnail" alt="...">
+                </div>
+                <div class="text-center mt-4">
+                    <h5>Erciyes Üniversitesi Bilgisayar Mühendisliği Bölümü Web Programlama 1 Dersi Final Sorusu</h5>
+                    <h6>Dr. Öğr. Üyesi Fehim Köylü</h6>
+                    <h3>Alışveriş Uygulaması</h3>
+                    <p>Vermek istediğiniz siparişler için aşağıdaki listeden seçerek adedini belirtiniz</p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col" ng-repeat="product in products">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="text-center">
+                                <span>{{product.title}}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <span id="productPrice">{{product.price}}<span id="productUnit"> / {{product.unit}}</span></span><br/>
+                                <span id="productDescription">{{product.description}}</span><br/>
+                                <span id="productFeature">{{product.features}}</span>
+                            </div>
+                            <div class="d-grid gap-2 mt-2">
+                                <a href="#" class="btn btn-block btn-primary">Sepete Ekle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                
+            </div>
+        </div>
+    </div>
 </body>
 <script type="text/javascript">
     var app = angular.module("app", []);
+    app.controller("app-controller", function($scope) {
+        $scope.products = [
+            {
+                title: 'Ekmek',
+                price: '2₺',
+                unit: 'Adet',
+                description: 'Somun ekmek',
+                features: '200 gr'
+            },
+            {
+                title: 'Çikolata',
+                price: '5₺',
+                unit: 'Adet',
+                description: 'Bitter Çikolata',
+                features: '60 gr'
+            },
+            {
+                title: 'Domates',
+                price: '2₺',
+                unit: 'Kg',
+                description: 'Domates',
+                features: 'Antalya Sera'
+            }
+        ]
+    });
 </script>
 </html>

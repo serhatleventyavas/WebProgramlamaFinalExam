@@ -1,0 +1,20 @@
+#productPrice {
+    font-size: 30px;
+}
+
+#productUnit {
+    font-size: 20px;
+    color: gray;
+}
+
+#productDescription {
+    font-size: 14px;
+    font-weight: 200;
+    color: black;
+}
+
+#productFeature {
+    font-size: 14px;
+    font-weight: 200;
+    color: black;
+}
